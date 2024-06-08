@@ -23,8 +23,8 @@ function authenticateToken(req, res, next) {
     const authHeader = req.headers["authorization"];
     const token = authHeader && authHeader.split(' ')[1];
 
-    if(token == null) {
-        res.status(401).json({message: "Not authorized for this token missing!"});
+    if(!token || token == null) {
+        return res.status(401).json({message: "Not authorized for this token missing!"});
     } 
     jwt.verify(token, process.env.JWT_SECRET_KEY, (err, username) => {
         if(err) {
@@ -39,7 +39,7 @@ function authenticateToken(req, res, next) {
 
 const port = process.env.PORT | 3000;
 
-app.get("/home", (req, res) => {
+app.get("/home", authenticateToken, (req, res) => {
     res.render("home");
 });
 
