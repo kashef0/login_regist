@@ -15,9 +15,7 @@ app.use(bodyParser.json());
 
 app.use("/api", authRoutes);
 
-app.get("/api/protected", authenticateToken, (req, res) => {
-    res.json({message: "shyddad route! "});
-});
+
 
 function authenticateToken(req, res, next) {
     const authHeader = req.headers["authorization"];
@@ -38,6 +36,10 @@ function authenticateToken(req, res, next) {
 }
 
 const port = process.env.PORT | 3000;
+
+app.get("/api/protected", authenticateToken, (req, res) => {
+    res.json({message: "shyddad route! "});
+});
 
 app.get("/home", authenticateToken, (req, res) => {
     res.render("home");
